@@ -1,6 +1,18 @@
 package lesson1;
 
 import kotlin.NotImplementedError;
+import org.jetbrains.annotations.NotNull;
+
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -34,8 +46,38 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public void sortTimes(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTimes(String inputName, String outputName) throws Exception {
+        class Date implements Comparable<Date>{
+            private final String dateStr;
+            private final Integer dateInt;
+            public Date(String date) throws Exception {
+                if (!Pattern.matches("((\\d{2}):){2}(\\d\\d)\\s(PM|AM)", date)) throw new Exception();
+                String[] tmS = date.split("(:|\s)");
+                int[] tmI = {Integer.parseInt(tmS[0]), Integer.parseInt(tmS[1]), Integer.parseInt(tmS[2])};
+                if (tmI[0] > 12 || tmI[1] >= 60 || tmI[2] >= 60) throw new Exception(date);
+                if (tmI[0] == 12) tmI[0] = 0;
+                if (tmS[3].equals("PM")) tmI[0] += 12;
+                this.dateStr = date;
+                this.dateInt = tmI[0] * 3600 + tmI[1] * 60 + tmI[2];
+            }
+            @Override
+            public String toString() {
+                return dateStr;
+            }
+            @Override
+            public int compareTo(Date o) {
+                return dateInt - o.dateInt;
+            }
+        }
+        Scanner scanner = new Scanner(Paths.get(inputName));
+        List<Date> dateList = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            dateList.add(new Date(scanner.nextLine()));
+        }
+        Collections.sort(dateList);
+        PrintWriter out = new PrintWriter(outputName, StandardCharsets.UTF_8);
+        dateList.forEach(out::println);
+        out.close();
     }
 
     /**
@@ -64,8 +106,53 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public void sortAddresses(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortAddresses(String inputName, String outputName) throws Exception {
+        class Pair implements Comparable<Pair>{
+            private final String s;
+            private final Integer i;
+            public Pair(String addr){
+                String[] a = addr.split(" ");
+                this.s = a[0];
+                this.i = Integer.parseInt(a[1]);
+            }
+            public String getS() {
+                return s;
+            }
+            public Integer getI() {
+                return i;
+            }
+            public String getStr() {
+                return s + " " + i;
+            }
+            @Override
+            public int compareTo(Pair o) {
+                int resComp = getS().compareTo(o.getS());
+                if (resComp == 0) {
+                    return getI() - o.getI();
+                } else {
+                    return resComp;
+                }
+            }
+        }
+        Map<Pair, ArrayList<String>> map = new TreeMap<>();
+        Scanner scanner = new Scanner(Paths.get(inputName), StandardCharsets.UTF_8);
+        while (scanner.hasNext()) {
+            String info = scanner.nextLine();
+            if (!Pattern.matches("([А-Я][а-я]+\\s){2}-\\s(.+\\s\\d+)", info)) throw new Exception();
+            String[] infoList = info.split(" - ");
+            Pair addr = new Pair(infoList[1]);
+            if (map.containsKey(addr)) {
+                map.get(addr).add(infoList[0]);
+            } else {
+                map.put(addr, new ArrayList<>(List.of(infoList[0])));
+            }
+        }
+        PrintWriter out = new PrintWriter(outputName, StandardCharsets.UTF_8);
+        map.forEach((k, v) -> {
+            Collections.sort(v);
+            out.println(k.getStr() + " - " + String.join(", ", v));
+        });
+        out.close();
     }
 
     /**
