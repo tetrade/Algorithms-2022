@@ -46,6 +46,8 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+    // можно использовать такой же подход, как в задаче sortTemperatures (создать трехмерный массив int[25][60][60]),
+    // но для разнообразия решил реализовать по другому:
     static public void sortTimes(String inputName, String outputName) throws Exception {
         class Date implements Comparable<Date>{
             private final String dateStr;
