@@ -185,8 +185,26 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
+        int[][] temp = new int[775][20];
+        Scanner scanner = new Scanner(Paths.get(inputName));
+        while (scanner.hasNext()) {
+            String[] floatN = scanner.nextLine().split("\\.");
+            if (floatN[0].contains("-")) {
+                temp[Integer.parseInt(floatN[0]) + 274][-Integer.parseInt(floatN[1]) + 10] += 1;
+            } else {
+                temp[Integer.parseInt(floatN[0]) + 274][Integer.parseInt(floatN[1]) + 10] += 1;
+            }
+        }
+        PrintWriter out = new PrintWriter(outputName);
+        for (int i = 0; i < 774; ++i) {
+            for (int j = 0; j < 20; ++j) {
+                for (int k = 0; k < temp[i][j]; k++) {
+                    out.println((i - 274) + (j - 10) / 10.0);
+                }
+            }
+        }
+        out.close();
     }
 
     /**
