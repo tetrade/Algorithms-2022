@@ -3,6 +3,10 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.IOException;
+
+
+
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
     /**
@@ -97,8 +101,31 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
+//   T = O(n*m), R = O(n*m)
     static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+        int maxI = 0;
+        int maxJ = 0;
+        int n = firs.length();
+        int m = second.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int i = 1; i < n + 1; i++){
+            for (int j = 1; j < m + 1; j++) {
+                if (firs.charAt(i - 1) == second.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    if (dp[i][j] > dp[maxI][maxJ]) {
+                        maxI = i;
+                        maxJ = j;
+                    }
+                }
+            }
+        }
+        StringBuilder ans = new StringBuilder();
+        while (maxI > 0 && maxJ > 0 && dp[maxI][maxJ] != 0) {
+            maxI--;
+            maxJ--;
+            ans.append(firs.charAt(maxI));
+        }
+        return ans.reverse().toString();
     }
 
     /**
@@ -111,7 +138,22 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
+
+    static public boolean isPrime(int num) {
+        if (num == 2) return true;
+        for (int i = 2; i <= Math.floor(Math.sqrt(num) + 1); i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // T = O(n), R = 0(1)
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        int cnt  = 0;
+        for (int i = 2; i <= limit; i++) {
+            if (isPrime(i)) cnt++;
+        }
+        return cnt;
     }
 }

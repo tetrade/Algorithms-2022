@@ -1,14 +1,8 @@
 package lesson1;
 
 import kotlin.NotImplementedError;
-import org.jetbrains.annotations.NotNull;
-
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
