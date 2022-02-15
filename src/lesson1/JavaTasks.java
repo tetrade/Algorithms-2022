@@ -42,6 +42,7 @@ public class JavaTasks {
      */
     // можно использовать такой же подход, как в задаче sortTemperatures (создать трехмерный массив int[25][60][60]),
     // но для разнообразия решил реализовать по другому:
+    // T = O(n + nlog(n)) = O(nlog(n)), R = O(n)
     static public void sortTimes(String inputName, String outputName) throws Exception {
         class Date implements Comparable<Date>{
             private final String dateStr;
@@ -102,6 +103,11 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+
+    //                          get         contKey       next
+    // TreeMap               | O(log n) |   O(log n)  | O(log n)
+    // n - кол. человек, m - кол. городов
+    // T = O(n(log(n) + log(n)) + m * nlog(n)) = O(m * nlog(n)), R = O(n)
     static public void sortAddresses(String inputName, String outputName) throws Exception {
         class Pair implements Comparable<Pair>{
             private final String s;
@@ -138,9 +144,9 @@ public class JavaTasks {
             String[] infoList = info.split(" - ");
             Pair addr = new Pair(infoList[1]);
             if (map.containsKey(addr)) {
-                map.get(addr).add(infoList[0]);
+                map.get(addr).add(infoList[0]); // log(n)
             } else {
-                map.put(addr, new ArrayList<>(List.of(infoList[0])));
+                map.put(addr, new ArrayList<>(List.of(infoList[0]))); // log(n)
             }
         }
         PrintWriter out = new PrintWriter(outputName, StandardCharsets.UTF_8);
@@ -181,6 +187,7 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
+    // T = O(n), R = 0(1)
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         int[][] temp = new int[775][20];
         Scanner scanner = new Scanner(Paths.get(inputName));
