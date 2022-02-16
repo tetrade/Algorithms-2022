@@ -1,6 +1,7 @@
 package lesson1
 
 import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.assertThrows
 import util.PerfResult
 import util.estimate
 import java.io.BufferedWriter
@@ -8,10 +9,23 @@ import java.io.File
 import java.util.*
 import kotlin.math.abs
 import kotlin.system.measureNanoTime
+import kotlin.test.assertFailsWith
+
 
 abstract class AbstractTaskTests : AbstractFileTests() {
 
     protected fun sortTimes(sortTimes: (String, String) -> Unit) {
+        try {
+            sortTimes("input/my_test_files/time_in4.txt", "temp.txt")
+            assertFileContent("temp.txt", File("input/my_test_files/time_out4.txt").readLines())
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            assertFailsWith<Exception> { sortTimes("input/my_test_files/time_in5_wformat.txt", "temp.txt") }
+        } finally {
+            File("temp.txt").delete()
+        }
         try {
             sortTimes("input/time_in1.txt", "temp.txt")
             assertFileContent(
@@ -54,6 +68,11 @@ abstract class AbstractTaskTests : AbstractFileTests() {
     }
 
     protected fun sortAddresses(sortAddresses: (String, String) -> Unit) {
+        try {
+            assertThrows<Exception> { sortAddresses("input/my_test_files/addr_in4.txt", "temp.txt") }
+        } finally {
+            File("temp.txt").delete()
+        }
         try {
             sortAddresses("input/addr_in1.txt", "temp.txt")
             assertFileContent(
@@ -113,6 +132,12 @@ abstract class AbstractTaskTests : AbstractFileTests() {
     }
 
     protected fun sortTemperatures(sortTemperatures: (String, String) -> Unit) {
+        try {
+            sortTemperatures("input/my_test_files/temp_in2.txt", "temp.txt")
+            assertFileContent("temp.txt", File("input/my_test_files/temp_in2.txt").readLines())
+        } finally {
+            File("temp.txt").delete()
+        }
         try {
             sortTemperatures("input/temp_in1.txt", "temp.txt")
             assertFileContent(
