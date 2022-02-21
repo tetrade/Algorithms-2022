@@ -148,7 +148,7 @@ public class JavaAlgorithms {
         }
         return true;
     }
-    // T = O(n), R = 0(1)
+    // T = O(n * sqrt(n)), R = 0(1)
     static public int calcPrimesNumber(int limit) {
         int cnt  = 0;
         for (int i = 2; i <= limit; i++) {

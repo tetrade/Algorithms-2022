@@ -162,6 +162,7 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+
     }
 
     protected fun doIteratorTest() {

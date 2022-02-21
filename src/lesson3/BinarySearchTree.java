@@ -117,7 +117,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
      * Средняя
      */
 
-
+//  T = O(h), h - высота дерева. R = O(1)
     private Node<T> minNode(Node<T> start) {
         if (start.left == null) return start;
         return minNode(start.left);
@@ -204,6 +204,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
          *
          * Средняя
          */
+
         @Override
         public boolean hasNext() {
             return !stackNode.empty();
@@ -222,6 +223,8 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
          *
          * Средняя
          */
+
+//       T = O(1), R = O(h), h - height of a tree
         @Override
         public T next() {
             if(!hasNext()) throw new NoSuchElementException();
@@ -242,7 +245,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
          *
          * Сложная
          */
-        //
+        // same as remove: T = O(log(n) + log(n) + ..) = O(log(n)), R = O(1)
         @Override
         public void remove() {
             if (lastNext == null) throw new IllegalStateException();
@@ -271,6 +274,9 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
         // TODO
+
+
+
         throw new NotImplementedError();
     }
 
