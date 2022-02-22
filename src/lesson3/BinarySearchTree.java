@@ -117,7 +117,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
      * Средняя
      */
 
-//  T = O(h), h - высота дерева. R = O(1)
+//  T = O(h) ~ O(log(n)), h - высота дерева. R = O(1)
     private Node<T> minNode(Node<T> start) {
         if (start.left == null) return start;
         return minNode(start.left);
@@ -274,9 +274,6 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
         // TODO
-
-
-
         throw new NotImplementedError();
     }
 

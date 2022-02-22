@@ -162,7 +162,22 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
-
+        val controlSet = mutableSetOf(5, 1, 2, 3, 3, 2, 2, 5, 0, -1, -5)
+        val binarySet = create()
+        for (element in controlSet) {
+            binarySet += element
+        }
+        assertFalse(binarySet.remove(4))
+        assertFalse(binarySet.remove(-4))
+        for (el in controlSet) {
+            assertTrue(binarySet.contains(el))
+        }
+        assertTrue(binarySet.remove(2))
+        assertFalse(binarySet.contains(2))
+        controlSet.remove(2)
+        for (el in controlSet) {
+            assertTrue(binarySet.contains(el))
+        }
     }
 
     protected fun doIteratorTest() {
@@ -206,6 +221,20 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+
+        val controlSet = TreeSet<Int>()
+        val bst = create()
+        assertFalse { bst.iterator().hasNext() }
+        for (el in listOf(2, 1, 3, -1, -1, -1, 5, 4, 7, 12)) {
+            controlSet.add(el)
+            bst.add(el)
+        }
+        val iter = controlSet.iterator()
+        val bstIter = bst.iterator()
+        iter.forEach {
+            assertTrue { it.compareTo(bstIter.next()) == 0 }
+        }
+        assertTrue { !bstIter.hasNext() && !iter.hasNext() }
     }
 
     protected fun doIteratorRemoveTest() {
@@ -273,6 +302,20 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+
+        val controlSet = TreeSet<Int>()
+        val bst = create()
+        assertFalse { bst.iterator().hasNext() }
+        for (el in listOf(6, 2, 9, 1, 5, 8, -1, -1, -1, 4, -1, 7)) {
+            bst.add(el)
+            if (el % 2 == 1) controlSet.add(el)
+        }
+        val bstIter = bst.iterator()
+        while (bstIter.hasNext()) {
+            if (bstIter.next() % 2 == 0) bstIter.remove()
+        }
+        for (el in controlSet) assertTrue { bst.contains(el) }
+        assertTrue { !bstIter.hasNext() }
     }
 
     protected fun doSubSetTest() {
