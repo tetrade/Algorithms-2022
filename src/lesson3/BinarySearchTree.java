@@ -50,6 +50,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
     private Node<T> findParent(Node<T> start, Node<T> parentOf) {
         if (root.value == parentOf.value) return null;
         T value = parentOf.value;
+//        if (start == null) System.out.println("lol");;
         if (start.left != null && start.left.value.compareTo(value) == 0) {
            return start;
         } else if (start.right != null && start.right.value.compareTo(value) == 0) {
@@ -123,13 +124,9 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
         return minNode(start.left);
     }
 
-    // T = O(log(n) + log(n) + ..) = O(log(n)), R = O(1)
-    @Override
-    public boolean remove(Object o) {
-        @SuppressWarnings("unchecked")
-        T t = (T) o;
-        Node<T> toDel = find(t);
-        if (toDel == null || t.compareTo(toDel.value) != 0) return false;
+
+
+    private void remove(@NotNull Node<T> toDel) {
         Node<T> parent = findParent(root, toDel);
         if (toDel.left == null) {
             if (parent == null) {
@@ -154,16 +151,29 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
             replacement.left = toDel.left;
             replacement.right = toDel.right;
             if (parent == null) {
-               root = replacement;
+                root = replacement;
             } else if (parent.value.compareTo(toDel.value) < 0) {
                 parent.right = replacement;
             } else {
-               parent.left = replacement;
+                parent.left = replacement;
             }
         }
         size --;
+    }
+
+
+    // T = O(log(n) + log(n) + ..) = O(log(n)), R = O(1)
+    @Override
+    public boolean remove(Object o) {
+        @SuppressWarnings("unchecked")
+        T t = (T) o;
+        Node<T> toDel = find(t);
+        if (toDel == null || t.compareTo(toDel.value) != 0) return false;
+        remove(toDel);
         return true;
     }
+
+
 
     @Nullable
     @Override
@@ -249,7 +259,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
         @Override
         public void remove() {
             if (lastNext == null) throw new IllegalStateException();
-            BinarySearchTree.this.remove(lastNext.value);
+            BinarySearchTree.this.remove(lastNext); // теперь не будет лишний раз искать
             lastNext = null;
         }
     }

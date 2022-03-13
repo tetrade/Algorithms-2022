@@ -306,7 +306,7 @@ abstract class AbstractBinarySearchTreeTest {
         val controlSet = TreeSet<Int>()
         val bst = create()
         assertFalse { bst.iterator().hasNext() }
-        for (el in listOf(6, 2, 9, 1, 5, 8, -1, -1, -1, 4, -1, 7)) {
+        for (el in listOf(6, 2, 9, 1, 5, 8, 1, 9, 1)) {
             bst.add(el)
             if (el % 2 == 1) controlSet.add(el)
         }

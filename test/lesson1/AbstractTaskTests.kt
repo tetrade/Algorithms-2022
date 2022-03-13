@@ -69,11 +69,6 @@ abstract class AbstractTaskTests : AbstractFileTests() {
 
     protected fun sortAddresses(sortAddresses: (String, String) -> Unit) {
         try {
-            assertThrows<Exception> { sortAddresses("input/my_test_files/addr_in4.txt", "temp.txt") }
-        } finally {
-            File("temp.txt").delete()
-        }
-        try {
             sortAddresses("input/addr_in1.txt", "temp.txt")
             assertFileContent(
                 "temp.txt",
@@ -101,6 +96,11 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         try {
             sortAddresses("input/empty.txt", "temp.txt")
             assertFileContent("temp.txt", "")
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            assertThrows<Exception> { sortAddresses("input/my_test_files/addr_in4.txt", "temp.txt") }
         } finally {
             File("temp.txt").delete()
         }
