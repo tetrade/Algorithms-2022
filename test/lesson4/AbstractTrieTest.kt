@@ -110,6 +110,21 @@ abstract class AbstractTrieTest {
             }
             println("All clear!")
         }
+
+        val controlSet = sortedSetOf(
+            "farfa", "rfrfrea", "qqq", "rfvqev", "gjrf", "afgifiof",
+            "qq", "rqer", "polytech", "best", "university"
+        )
+        val trieSet = create()
+        controlSet.forEach { trieSet += it }
+        val iterator = trieSet.iterator()
+        while (iterator.hasNext()) {
+            val it = iterator.next()
+            assertTrue { controlSet.contains(it) }
+            controlSet.remove(it)
+        }
+        assertTrue { controlSet.isEmpty() }
+        assertFailsWith<java.util.NoSuchElementException> { iterator.next() }
     }
 
     protected fun doIteratorRemoveTest() {
@@ -171,6 +186,25 @@ abstract class AbstractTrieTest {
             }
             println("All clear!")
         }
-    }
 
+        val controlSet = sortedSetOf(
+            "farfa", "rfrfrea", "qqq", "rfvqev", "gjrf", "afgifiof",
+            "qq", "rqerbbbb", "polytech", "best", "univer", "ffaerrrrrrr"
+        )
+        val trieSet = create()
+        controlSet.forEach { trieSet += it }
+        val iterator = trieSet.iterator()
+        while (iterator.hasNext()) {
+            val it = iterator.next()
+            if (it.length > 6) {
+                iterator.remove()
+                controlSet.remove(it)
+            }
+        }
+        trieSet.forEach {
+            assertTrue { controlSet.contains(it) }
+            controlSet.remove(it)
+        }
+        assertTrue { controlSet.isEmpty() }
+    }
 }

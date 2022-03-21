@@ -84,26 +84,6 @@ public class Trie extends AbstractSet<String> implements Set<String> {
         return false;
     }
 
-    private boolean findNodeDel(String s) {
-        Node toDel = null;
-        char toDelChar = 0;
-        Node current = root;
-        for (char character : s.toCharArray()) {
-            if (current.children.size() > 1){
-                toDel = current;
-                toDelChar = character;
-            }
-            current = current.children.get(character);
-        }
-        if (toDel != null) {
-            toDel.children.remove(toDelChar);
-            return true;
-        } else {
-            return false;
-        }
-
-
-    }
 
     /**
      * Итератор для префиксного дерева
@@ -146,12 +126,15 @@ public class Trie extends AbstractSet<String> implements Set<String> {
             }
         }
 
+//      R = O(1), T = O(N)
         @Override
         public boolean hasNext() {
-            removeEmptyDeq();
+            removeEmptyDeq(); // O(N)
             return !deq.isEmpty();
         }
 
+
+//      R = O(1), T = O(N)
         @Override
         public String next() {
             if (!hasNext()) throw new NoSuchElementException();
@@ -159,6 +142,7 @@ public class Trie extends AbstractSet<String> implements Set<String> {
             return lastNext;
         }
 
+//      T = R = O(1)
         @Override
         public void remove() {
             if (lastNext == null) throw new IllegalStateException();
