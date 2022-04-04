@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class OpenAddressingSet<T> extends AbstractSet<T> {
 
+    private Object occupied = new Object();
+
     private final int bits;
 
     private final int capacity;
@@ -41,15 +43,21 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
     @Override
     public boolean contains(Object o) {
         int index = startingIndex(o);
+        int startIndex = index;
         Object current = storage[index];
-        while (current != null) {
-            if (current.equals(o)) {
-                return true;
+        while (true) {
+            if (current == occupied) {
+                index = (index + 1) % capacity;
+                if (index == startIndex) return false;
+                current = storage[index];
+                continue;
             }
+            if (current == null) return false;
+            if (current.equals(o)) return true;
             index = (index + 1) % capacity;
+            if (index == startIndex) return false;
             current = storage[index];
         }
-        return false;
     }
 
     /**
@@ -67,7 +75,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
         int startingIndex = startingIndex(t);
         int index = startingIndex;
         Object current = storage[index];
-        while (current != null) {
+        while (current != null && current != occupied) {
             if (current.equals(t)) {
                 return false;
             }
@@ -95,7 +103,19 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
      */
     @Override
     public boolean remove(Object o) {
-        return super.remove(o);
+        int index = startingIndex(o);
+        int startIndex = index;
+        Object current = storage[index];
+        while (current != null) {
+            if (current.equals(o)) {
+                storage[index] = occupied;
+                size--;
+                return true;
+            }
+            index = (index + 1) % capacity;
+            if (index == startIndex) break;
+        }
+        return false;
     }
 
     /**

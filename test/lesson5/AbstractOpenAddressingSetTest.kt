@@ -48,9 +48,12 @@ abstract class AbstractOpenAddressingSetTest {
             for (i in 1..50) {
                 val firstInt = random.nextInt(32)
                 val secondInt = firstInt + (1 shl bitsNumber)
+//                val firstInt = 15
+//                val secondInt = 271
                 openAddressingSet += secondInt
                 openAddressingSet += firstInt
                 val expectedSize = openAddressingSet.size - 1
+                println("${i} ${firstInt} ${secondInt}")
                 assertTrue(
                     openAddressingSet.remove(secondInt),
                     "An element wasn't removed contrary to expected."
