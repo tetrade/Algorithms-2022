@@ -48,12 +48,9 @@ abstract class AbstractOpenAddressingSetTest {
             for (i in 1..50) {
                 val firstInt = random.nextInt(32)
                 val secondInt = firstInt + (1 shl bitsNumber)
-//                val firstInt = 15
-//                val secondInt = 271
                 openAddressingSet += secondInt
                 openAddressingSet += firstInt
                 val expectedSize = openAddressingSet.size - 1
-                println("${i} ${firstInt} ${secondInt}")
                 assertTrue(
                     openAddressingSet.remove(secondInt),
                     "An element wasn't removed contrary to expected."
@@ -80,6 +77,29 @@ abstract class AbstractOpenAddressingSetTest {
                 )
             }
         }
+        val controlSet = mutableSetOf<Int>(
+            5, 41, 1, 68, 109, 179, 200, 30
+        )
+        val openAddressingSet = create<Int>(8)
+        controlSet.forEach {
+            openAddressingSet.add(it)
+        }
+        var checkSize = openAddressingSet.size
+        controlSet.forEach {
+            if (it > 100) {
+                assertTrue { openAddressingSet.remove(it) }
+                assertFalse { openAddressingSet.contains(it) }
+                assertFalse { openAddressingSet.remove(it) }
+                checkSize -= 1
+                assertEquals(openAddressingSet.size, checkSize)
+            }
+        }
+        controlSet.removeIf { it > 100 }
+        controlSet.forEach {
+            assertTrue { openAddressingSet.contains(it) }
+            checkSize -= 1
+        }
+        assertTrue { checkSize == 0}
     }
 
     protected fun doIteratorTest() {
@@ -122,6 +142,21 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+        val controlSet = mutableSetOf(
+            58, 10, 123, 255, 1, 61, 25, 100, 99
+        )
+        val openAddressingSet = create<Int>(8)
+        controlSet.forEach {
+            openAddressingSet.add(it)
+        }
+        val controlSetIterator = controlSet.iterator()
+        val openAddressingSetIterator = openAddressingSet.iterator()
+        while (openAddressingSetIterator.hasNext() || controlSetIterator.hasNext()) {
+            assertTrue { controlSet.contains(openAddressingSetIterator.next()) }
+            assertTrue { openAddressingSet.contains(controlSetIterator.next()) }
+        }
+        assertFalse { openAddressingSetIterator.hasNext() }
+        assertFailsWith<java.util.NoSuchElementException> { openAddressingSetIterator.next() }
     }
 
     protected fun doIteratorRemoveTest() {
@@ -179,5 +214,31 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+
+        val controlSet = mutableSetOf(
+            58, 120, 123, 500, 1, 261, 390, 10, 299
+        )
+        val openAddressingSet = create<Int>(9)
+        controlSet.forEach {
+            openAddressingSet.add(it)
+        }
+        val openAddressingSetIterator = openAddressingSet.iterator()
+        while (openAddressingSetIterator.hasNext()) {
+            val itemFromOpenAddSet = openAddressingSetIterator.next()
+            assertTrue { openAddressingSet.contains(itemFromOpenAddSet) }
+            if (itemFromOpenAddSet % 2 == 0) {
+                openAddressingSetIterator.remove()
+                assertFalse { openAddressingSet.contains(itemFromOpenAddSet) }
+                assertFailsWith<IllegalStateException> { openAddressingSetIterator.remove() }
+            }
+        }
+        controlSet.removeIf { it % 2 == 0 }
+        val controlSetIterator = controlSet.iterator()
+        while (controlSetIterator.hasNext()) {
+            val itemFromControlSet = controlSetIterator.next()
+            assertTrue { openAddressingSet.contains(itemFromControlSet) }
+            openAddressingSet.remove(itemFromControlSet)
+        }
+        assertTrue { openAddressingSet.size == 0 }
     }
 }
